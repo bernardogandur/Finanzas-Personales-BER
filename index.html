@@ -2,15 +2,16 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Finanzas de Ber">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#d6eadf">
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-startup-image" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1D9E75">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Finanzas de Ber">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Finanzas de Ber</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -31,7 +32,8 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:"Nunito",sans-serif;font-size:14px;overscroll-behavior:none}
+html{height:100%;height:-webkit-fill-available;background:var(--bg)}
+body{height:100%;height:-webkit-fill-available;background:var(--bg);color:var(--text);font-family:"Nunito",sans-serif;font-size:14px;overscroll-behavior:none;overflow:hidden;position:fixed;width:100%;-webkit-text-size-adjust:100%}
 
 /* ── SPLASH ── */
 .splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .6s ease;gap:20px}
@@ -44,7 +46,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:"Nunito
 @keyframes pulse{0%,100%{box-shadow:0 6px 24px rgba(29,158,117,.35)}50%{box-shadow:0 6px 32px rgba(29,158,117,.55)}}
 
 /* ── DESKTOP LAYOUT ── */
-.app{display:grid;grid-template-columns:210px 1fr;grid-template-rows:58px 1fr;height:100vh;overflow:hidden}
+.app{display:grid;grid-template-columns:210px 1fr;grid-template-rows:58px 1fr;height:100vh;height:-webkit-fill-available;overflow:hidden;position:relative}
 .topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;box-shadow:var(--shsm);z-index:10}
 .sidebar{background:rgba(255,255,255,.75);backdrop-filter:blur(8px);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;overflow-y:auto}
 .main{overflow-y:auto;overflow-x:hidden;padding:20px;display:flex;flex-direction:column;gap:14px}
@@ -278,8 +280,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:"Nunito
   .app{
     grid-template-columns:1fr;
     grid-template-rows:52px 1fr;
-    height:100dvh; /* dynamic viewport height — respects browser chrome */
+    height:100dvh;
+    height:-webkit-fill-available;
     overflow:hidden;
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
   }
   .sidebar{display:none}
 
@@ -288,9 +293,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:"Nunito
     padding:10px 12px 0;
     gap:10px;
     height:calc(100dvh - 52px);
-    overflow:hidden; /* no page scroll */
+    height:calc(-webkit-fill-available - 52px);
+    overflow:hidden;
     display:flex;
     flex-direction:column;
+    -webkit-overflow-scrolling:touch;
   }
 
   /* Dashboard page fills height */
