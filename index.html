@@ -370,13 +370,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
   </div>
 </div>
 
+<!-- Delete month modal -->
+<div id="deleteMonthModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border-radius:var(--r);padding:22px 24px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,.15)">
+    <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px">Borrar mes</div>
+    <div style="font-size:12px;color:var(--text3);font-weight:600;margin-bottom:16px">Selecciona el mes que quieres eliminar. Se borrarán todos sus registros.</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px">Mes a eliminar</div>
+      <select id="deleteMonthSel" class="debt-form-input" style="width:100%"></select>
+    </div>
+    <div style="background:var(--red-pale);border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:12px;color:var(--red);font-weight:600">
+      ⚠️ Esta acción no se puede deshacer. Se eliminarán todos los gastos e ingresos del mes.
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-save" style="flex:1;background:var(--red);border:none" onclick="confirmDeleteMonth()">Eliminar mes</button>
+      <button class="btn-cancel" onclick="document.getElementById('deleteMonthModal').style.display='none'">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <aside class="sidebar">
   <div class="nav-section">Vistas</div>
   <div class="nav-item active" id="nav-dashboard" onclick="goPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
   <div class="nav-item" id="nav-historial" onclick="goPage('historial')"><i class="ti ti-calendar-stats"></i> Historial</div>
   <div class="nav-item" id="nav-deudas" onclick="goPage('deudas')"><i class="ti ti-credit-card-off"></i> Deudas</div>
   <div class="nav-section">Acciones</div>
-  <div class="nav-item" onclick="clearMonth()"><i class="ti ti-trash"></i> Limpiar mes</div>
+  <div class="nav-item" onclick="openDeleteMonth()"><i class="ti ti-trash"></i> Borrar mes</div>
   <div style="margin-top:auto;padding-top:18px">
     <div class="sidebar-pill">
       <div class="sp-label">Sueldo / quincena</div>
@@ -693,7 +712,7 @@ function renderDashboard(){
     const isIng=r.tipo==='Ingreso',isRec=r.rec==='Si';
     const cls=isIng?'ti-ing':isRec?'ti-rec':'ti-gst';
     const icon=isIng?'ti-arrow-up':isRec?'ti-refresh':'ti-arrow-down';
-    const canDel=!r.id?.startsWith('sq')&&!r.id?.startsWith('m_')&&!r.id?.startsWith('rec_');
+    const canDel=r.tipo!=='_marker';
     const[,mm,dd]=r.fecha.split('-');
     const mb=r.metodo==='Nu'?`<span class="m-badge" style="background:#e8f7f2;color:var(--green-txt)">NU</span>`:r.metodo==='Oro'?`<span class="m-badge" style="background:var(--amber-pale);color:#a06020">ORO</span>`:r.metodo==='Efectivo'?`<span class="m-badge" style="background:var(--surface2);color:var(--text3)">EF</span>`:'';
     return`<div class="txn"><div class="txn-icon ${cls}"><i class="ti ${icon}"></i></div><div class="txn-info"><div class="txn-name">${r.concepto} ${mb}</div><div class="txn-meta">${dd}/${mm} · ${r.cat||''}${isRec&&!isIng?' · recurrente':''}</div></div><div class="txn-amt" style="color:${isIng?'var(--green)':'#b05070'}">${isIng?'+':'-'}${fmt(r.monto)}</div>${canDel?`<button class="txn-del" onclick="delReg('${r.id}')"><i class="ti ti-x"></i></button>`:''}</div>`;
@@ -925,6 +944,40 @@ function setMonth(v){
   const opt=sel.options[sel.selectedIndex];
   curMonth=parseInt(v);
   curYear=parseInt(opt?.dataset.year||2026);
+  renderDashboard();
+}
+
+function openDeleteMonth(){
+  const months=getActiveMonths();
+  if(!months.length){alert('No hay meses para eliminar.');return;}
+  const sel=document.getElementById('deleteMonthSel');
+  sel.innerHTML=months.map(m=>`<option value="${m.month}_${m.year}">${MESES_NAMES[m.month]} ${m.year}</option>`).join('');
+  document.getElementById('deleteMonthModal').style.display='flex';
+}
+
+async function confirmDeleteMonth(){
+  const val=document.getElementById('deleteMonthSel').value;
+  if(!val)return;
+  const[mn,yr]=[parseInt(val.split('_')[0]),parseInt(val.split('_')[1])];
+  // Delete all regs for this month
+  const toDelete=_cache.regs.filter(r=>{
+    if(!r.fecha)return false;
+    const dt=new Date(r.fecha);
+    return dt.getFullYear()===yr&&(dt.getMonth()+1)===mn;
+  });
+  showLoading(true);
+  await Promise.all(toDelete.map(r=>deleteReg(r.id)));
+  // Remove month marker from cache
+  if(_cache.months) _cache.months=_cache.months.filter(m=>!(m.month===mn&&m.year===yr));
+  showLoading(false);
+  document.getElementById('deleteMonthModal').style.display='none';
+  // Switch to another month if we deleted the current one
+  const remaining=getActiveMonths();
+  if(remaining.length){
+    curMonth=remaining[remaining.length-1].month;
+    curYear=remaining[remaining.length-1].year;
+  }
+  renderMonthSelector();
   renderDashboard();
 }
 
