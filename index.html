@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8"/>
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1D9E75">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Finanzas">
-<link rel="icon" type="image/png" href="icon.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Finanzas Personales</title>
+<meta name="apple-mobile-web-app-title" content="Finanzas de Ber">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Finanzas de Ber</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
@@ -28,19 +28,32 @@
   --text:#1e3028;--text2:#4a7060;--text3:#88b09a;
   --r:16px;--rsm:10px;
   --sh:0 2px 16px rgba(29,100,60,.08);--shsm:0 1px 6px rgba(29,100,60,.05);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;font-size:14px}
-.app{display:grid;grid-template-columns:210px 1fr;grid-template-rows:58px 1fr;height:100vh;overflow:hidden}
-.topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;box-shadow:var(--shsm)}
-.sidebar{background:rgba(255,255,255,.75);backdrop-filter:blur(8px);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;overflow-y:auto}
-.main{overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:"Nunito",sans-serif;font-size:14px;overscroll-behavior:none}
 
-/* nav */
-.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14px;letter-spacing:-.3px;color:var(--text);white-space:nowrap;overflow:visible;flex-shrink:0}
-.logo-blob{width:30px;height:30px;background:var(--green);border-radius:50% 50% 50% 30%/50% 50% 30% 50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.tb-selects{display:flex;gap:7px;margin-left:auto}
-.tb-sel{background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;color:var(--text2);font-size:12px;font-weight:600;padding:5px 10px;font-family:'Nunito',sans-serif;cursor:pointer}
+/* ── SPLASH ── */
+.splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .6s ease;gap:20px}
+.splash.hidden{opacity:0;pointer-events:none}
+.splash-pig{font-size:90px;line-height:1;animation:pigBounce 1.8s ease-in-out infinite}
+@keyframes pigBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.splash-title{font-size:30px;font-weight:800;color:var(--text);letter-spacing:-.5px}
+.splash-subtitle{font-size:14px;color:var(--text3);font-weight:600;margin-top:-10px;text-align:center;padding:0 40px}
+.splash-btn{background:var(--green);color:#fff;border:none;border-radius:99px;padding:15px 52px;font-size:17px;font-weight:800;font-family:"Nunito",sans-serif;cursor:pointer;letter-spacing:.5px;box-shadow:0 6px 24px rgba(29,158,117,.35);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 6px 24px rgba(29,158,117,.35)}50%{box-shadow:0 6px 32px rgba(29,158,117,.55)}}
+
+/* ── DESKTOP LAYOUT ── */
+.app{display:grid;grid-template-columns:210px 1fr;grid-template-rows:58px 1fr;height:100vh;overflow:hidden}
+.topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;box-shadow:var(--shsm);z-index:10}
+.sidebar{background:rgba(255,255,255,.75);backdrop-filter:blur(8px);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;overflow-y:auto}
+.main{overflow-y:auto;overflow-x:hidden;padding:20px;display:flex;flex-direction:column;gap:14px}
+
+/* ── NAV ── */
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14px;letter-spacing:-.3px;color:var(--text);white-space:nowrap;flex-shrink:0}
+.logo-blob{width:30px;height:30px;background:var(--green);border-radius:50% 50% 50% 30%/50% 50% 30% 50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;line-height:1}
+.tb-selects{display:flex;gap:7px;margin-left:auto;align-items:center}
+.tb-sel{background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;color:var(--text2);font-size:12px;font-weight:600;padding:5px 10px;font-family:"Nunito",sans-serif;cursor:pointer}
 .tb-sel:focus{outline:none;border-color:var(--green)}
 .nav-section{font-size:10px;font-weight:700;letter-spacing:1.3px;color:var(--text3);padding:12px 8px 5px;text-transform:uppercase}
 .nav-item{display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:var(--rsm);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;margin-bottom:2px}
@@ -52,11 +65,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .sp-val{font-size:21px;font-weight:800;letter-spacing:-.5px}
 .sp-sub{font-size:11px;opacity:.75;margin-top:2px}
 
-/* pages */
+/* ── PAGES ── */
 .page{display:none}
 .page.active{display:flex;flex-direction:column;gap:14px}
 
-/* kpis */
+/* ── CARDS ── */
 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
 .kpi{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh)}
 .kpi.accent{background:var(--green);border-color:var(--green);box-shadow:0 4px 18px rgba(29,158,117,.22)}
@@ -68,14 +81,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .kpi.accent .kpi-sub{color:rgba(255,255,255,.65)}
 .mini-bar{height:4px;background:rgba(255,255,255,.25);border-radius:99px;margin-top:7px;overflow:hidden}
 .mini-fill{height:100%;background:rgba(255,255,255,.7);border-radius:99px;transition:width .6s}
-
-/* cards */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 17px;box-shadow:var(--sh)}
 .card-title{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;letter-spacing:.8px}
 .card-title-left{display:flex;align-items:center;gap:6px}
 
-/* tarjetas */
+/* ── TARJETAS ── */
 .tarjeta-row{display:flex;gap:7px;margin-bottom:11px}
 .tarjeta{flex:1;border-radius:var(--rsm);padding:9px 11px;border:1.5px solid transparent}
 .tarjeta.nu{background:#e8f7f2;border-color:#a8ddc8}
@@ -92,7 +103,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .dl{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--text2)}
 .dl-dot{width:7px;height:7px;border-radius:3px;flex-shrink:0}
 
-/* pie */
+/* ── PIE ── */
 .pie-card{background:var(--surface);border:2px solid #c8d8f0;border-radius:var(--r);padding:15px 17px;box-shadow:0 4px 22px rgba(100,120,200,.12)}
 .pie-inner{display:flex;gap:14px;align-items:center}
 .pie-canvas-wrap{width:140px;height:140px;flex-shrink:0}
@@ -104,20 +115,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .pl-pct{color:var(--text3);font-size:10px;min-width:24px;text-align:right}
 .pl-amt{font-weight:800;color:var(--text);min-width:56px;text-align:right;font-size:11px}
 .pie-hint{font-size:10px;color:var(--text3);font-weight:600;margin-bottom:9px;margin-top:-6px}
-.pie-back-btn{display:none;align-items:center;gap:4px;background:var(--surface2);border:1.5px solid var(--border);border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;font-family:'Nunito',sans-serif}
+.pie-back-btn{display:none;align-items:center;gap:4px;background:var(--surface2);border:1.5px solid var(--border);border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;font-family:"Nunito",sans-serif}
 
-/* summary strip */
+/* ── SUMMARY ── */
 .summary-strip{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:6px;box-shadow:var(--sh)}
 .ss-item{text-align:center}
 .ss-label{font-size:10px;font-weight:700;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.8px}
 .ss-val{font-size:19px;font-weight:800;letter-spacing:-.4px}
 .ss-div{width:1px;height:36px;background:var(--border)}
 
-/* txn list */
+/* ── TXN LIST ── */
 .txn-list{display:flex;flex-direction:column;gap:5px;max-height:270px;overflow-y:auto;padding-right:2px}
 .txn-list::-webkit-scrollbar{width:4px}
 .txn-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.txn{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--surface2);border-radius:var(--rsm);border:1.5px solid var(--border);transition:border-color .15s}
+.txn{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--surface2);border-radius:var(--rsm);border:1.5px solid var(--border);transition:border-color .15s;position:relative;overflow:hidden}
 .txn:hover{border-color:var(--green-mid)}
 .txn-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
 .ti-ing{background:#e8f7f2;color:var(--green-txt)}
@@ -127,12 +138,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .txn-name{font-size:12px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .txn-meta{font-size:10px;color:var(--text3);margin-top:1px;font-weight:600}
 .txn-amt{font-size:13px;font-weight:800;flex-shrink:0;letter-spacing:-.3px}
-.txn-del{background:none;border:none;cursor:pointer;color:var(--text3);padding:3px 5px;border-radius:6px;font-size:12px;margin-left:2px;transition:all .15s}
-.txn-del:hover{background:var(--red-pale);color:var(--red)}
+.txn-del{background:none;border:none;cursor:pointer;color:var(--text3);padding:3px 5px;border-radius:6px;font-size:12px;margin-left:2px;transition:all .15s;flex-shrink:0}
+.txn-del:hover,.txn-del:active{background:var(--red-pale);color:var(--red)}
 .m-badge{font-size:9px;padding:1px 5px;border-radius:4px;font-weight:700;letter-spacing:.4px}
 .empty-state{text-align:center;padding:24px;color:var(--text3);font-size:12px;font-weight:600}
 
-/* HISTORIAL */
+/* ── HISTORIAL ── */
 .hist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .hist-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 17px;box-shadow:var(--sh)}
 .hist-month{font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
@@ -151,7 +162,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .hist-cat-label{font-size:10px;font-weight:600;color:var(--text2);flex:1}
 .hist-cat-val{font-size:10px;font-weight:800;color:var(--text)}
 
-/* DEUDAS */
+/* ── DEUDAS ── */
 .debt-grid{display:flex;flex-direction:column;gap:12px}
 .debt-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 17px;box-shadow:var(--sh)}
 .debt-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
@@ -172,27 +183,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .debt-next{font-size:11px;color:var(--text3);font-weight:600;margin-left:auto}
 .debt-del-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:3px 5px;border-radius:6px;transition:all .15s}
 .debt-del-btn:hover{background:var(--red-pale);color:var(--red)}
-.add-debt-btn{background:var(--green);border:none;color:#fff;border-radius:var(--rsm);padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(29,158,117,.25);transition:background .15s;align-self:flex-start}
+.add-debt-btn{background:var(--green);border:none;color:#fff;border-radius:var(--rsm);padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:"Nunito",sans-serif;display:flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(29,158,117,.25);transition:background .15s;align-self:flex-start}
 .add-debt-btn:hover{background:#0f8060}
 .debt-form{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 17px;box-shadow:var(--sh)}
 .debt-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .debt-form-group{display:flex;flex-direction:column;gap:4px}
 .debt-form-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px}
-.debt-form-input{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-weight:600;padding:8px 11px;font-family:'Nunito',sans-serif;transition:border-color .15s}
+.debt-form-input{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-weight:600;padding:8px 11px;font-family:"Nunito",sans-serif;transition:border-color .15s}
 .debt-form-input:focus{outline:none;border-color:var(--green);background:#fff}
 .debt-form-actions{display:flex;gap:8px}
-.btn-save{background:var(--green);border:none;color:#fff;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
-.btn-cancel{background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
+.btn-save{background:var(--green);border:none;color:#fff;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:"Nunito",sans-serif}
+.btn-cancel{background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:"Nunito",sans-serif}
 
-/* chat */
+/* ── CHAT ── */
 .chat-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:13px 15px;box-shadow:var(--sh)}
 .chat-hint{font-size:11px;font-weight:600;color:var(--text3);margin-bottom:9px;line-height:1.8}
 .chat-hint span{color:var(--green-txt);background:#e8f7f2;padding:1px 6px;border-radius:5px;margin:0 2px}
 .chat-row{display:flex;gap:7px;align-items:center}
-.chat-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-size:13px;font-weight:600;padding:9px 13px;font-family:'Nunito',sans-serif;transition:border-color .15s}
+.chat-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);color:var(--text);font-size:13px;font-weight:600;padding:9px 13px;font-family:"Nunito",sans-serif;transition:border-color .15s}
 .chat-input:focus{outline:none;border-color:var(--green);background:#fff}
 .chat-input::placeholder{color:var(--text3);font-weight:500}
-.chat-btn{background:var(--green);border:none;color:#fff;border-radius:var(--rsm);padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:5px;box-shadow:0 3px 9px rgba(29,158,117,.28);transition:background .15s}
+.chat-btn{background:var(--green);border:none;color:#fff;border-radius:var(--rsm);padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:"Nunito",sans-serif;white-space:nowrap;display:flex;align-items:center;gap:5px;box-shadow:0 3px 9px rgba(29,158,117,.28);transition:background .15s}
 .chat-btn:hover{background:#0f8060}
 .chat-btn:disabled{opacity:.5;cursor:default}
 .chat-response{margin-top:7px;font-size:12px;font-weight:700;min-height:16px;display:flex;align-items:center;gap:5px;color:var(--text3)}
@@ -201,146 +212,314 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .spinner{width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── Mobile responsive ── */
-@media (max-width: 768px) {
-  .app { grid-template-columns: 1fr; grid-template-rows: 56px 1fr 56px; }
-  .sidebar { display: none; }
-  .main { padding: 12px; gap: 12px; }
+/* ── MOBILE BOTTOM NAV ── */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1.5px solid var(--border);z-index:100;padding:6px 0 calc(6px + var(--safe-bottom));box-shadow:0 -2px 12px rgba(29,100,60,.08)}
+.mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:700;color:var(--text3);cursor:pointer;padding:4px 0;transition:color .15s;border:none;background:none;font-family:"Nunito",sans-serif}
+.mobile-nav-item.active{color:var(--green-txt)}
+.mobile-nav-item i{font-size:22px}
 
-  /* Bottom nav bar */
-  .mobile-nav { display: flex !important; }
+/* ── MOBILE SWIPEABLE CARDS ── */
+.swipe-container{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;display:none;gap:12px;padding-bottom:4px}
+.swipe-container::-webkit-scrollbar{display:none}
+.swipe-card{scroll-snap-align:start;flex-shrink:0}
+.swipe-dots{display:none;justify-content:center;gap:6px;margin-top:4px}
+.swipe-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .2s,transform .2s}
+.swipe-dot.active{background:var(--green);transform:scale(1.3)}
 
-  /* KPIs: 2x2 grid */
-  .kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .kpi-val { font-size: 18px; }
+/* ── MOBILE QUICK ADD ── */
+.quick-add{display:none;position:fixed;bottom:calc(60px + var(--safe-bottom));right:16px;z-index:90}
+.quick-add-btn{width:52px;height:52px;border-radius:50%;background:var(--green);border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(29,158,117,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.quick-add-btn:active{transform:scale(.95)}
+.quick-add-panel{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-radius:20px 20px 0 0;padding:20px 20px calc(20px + var(--safe-bottom));box-shadow:0 -4px 24px rgba(0,0,0,.12);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:95}
+.quick-add-panel.open{transform:translateY(0)}
+.quick-add-handle{width:36px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 16px}
+.quick-add-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:14px}
+.qa-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.qa-field{display:flex;flex-direction:column;gap:4px}
+.qa-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px}
+.qa-input{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;font-weight:600;padding:11px 14px;font-family:"Nunito",sans-serif;-webkit-appearance:none}
+.qa-input:focus{outline:none;border-color:var(--green);background:#fff}
+.qa-chips{display:flex;gap:8px;flex-wrap:wrap}
+.qa-chip{padding:7px 14px;border-radius:99px;font-size:13px;font-weight:700;border:1.5px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;font-family:"Nunito",sans-serif;transition:all .15s}
+.qa-chip.selected{background:var(--green);color:#fff;border-color:var(--green)}
+.qa-chip.ing{background:#e8f7f2;color:var(--green-txt);border-color:var(--green-mid)}
+.qa-chip.ing.selected{background:var(--green);color:#fff}
+.qa-save-btn{width:100%;background:var(--green);border:none;color:#fff;border-radius:12px;padding:14px;font-size:16px;font-weight:800;cursor:pointer;font-family:"Nunito",sans-serif;box-shadow:0 4px 14px rgba(29,158,117,.3)}
+.qa-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:94}
+.qa-overlay.show{display:block}
 
-  /* Two-col: stack */
-  .two-col { grid-template-columns: 1fr; }
+/* ── MOBILE KPI SCROLL ── */
+.kpi-scroll{display:none;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:10px;padding-bottom:4px}
+.kpi-scroll::-webkit-scrollbar{display:none}
+.kpi-scroll .kpi{scroll-snap-align:start;flex-shrink:0;min-width:160px}
 
-  /* Historial: stack */
-  .hist-grid { grid-template-columns: 1fr; }
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:768px){
+  .app{grid-template-columns:1fr;grid-template-rows:52px 1fr}
+  .sidebar{display:none}
+  .main{padding:12px 12px calc(72px + var(--safe-bottom));gap:12px}
+  .mobile-nav{display:flex}
+  .quick-add{display:block}
 
-  /* Summary strip: 2 columns wrap */
-  .summary-strip { flex-wrap: wrap; gap: 10px; justify-content: center; }
-  .ss-div { display: none; }
-  .ss-item { min-width: 80px; }
-  .ss-val { font-size: 15px; }
+  /* KPIs → horizontal scroll */
+  .kpi-row{display:none}
+  .kpi-scroll{display:flex}
+  .kpi-val{font-size:20px}
+
+  /* Two col → swipeable */
+  .two-col{display:none}
+  .swipe-container{display:flex}
+  .swipe-card{width:calc(100vw - 40px)}
+  .swipe-dots{display:flex}
+
+  /* Historial → stack */
+  .hist-grid{grid-template-columns:1fr}
+
+  /* Summary → wrap */
+  .summary-strip{flex-wrap:wrap;gap:10px;justify-content:center}
+  .ss-div{display:none}
+  .ss-val{font-size:16px}
 
   /* Topbar */
-  .topbar { padding: 0 12px; gap: 8px; }
-  .tb-selects { gap: 5px; }
-  .tb-sel { font-size: 11px; padding: 4px 7px; }
-  .logo-text-hide { display: none; }
+  .topbar{padding:0 14px;gap:8px}
+  .tb-sel{font-size:11px;padding:4px 8px}
 
-  /* Pie */
-  .pie-inner { flex-direction: column; align-items: center; }
-  .pie-canvas-wrap { width: 160px; height: 160px; }
-  .pie-legend { width: 100%; }
+  /* Txn list taller on mobile */
+  .txn-list{max-height:none}
 
-  /* Txn list */
-  .txn-list { max-height: 320px; }
+  /* Chat input bigger on mobile */
+  .chat-input{font-size:16px;padding:12px 14px}
+  .chat-btn{padding:12px 16px}
 
-  /* Debt amounts */
-  .debt-amounts { grid-template-columns: repeat(3,1fr); }
-
-  /* Chat */
-  .chat-row { flex-wrap: wrap; }
-  .chat-input { min-width: 0; }
+  /* Debt form full width */
+  .debt-form-grid{grid-template-columns:1fr}
 }
 
-@media (max-width: 480px) {
-  .kpi-row { grid-template-columns: 1fr 1fr; gap: 7px; }
-  .kpi { padding: 11px 12px; }
-  .kpi-val { font-size: 16px; }
-  .kpi-label { font-size: 10px; }
+@media(max-width:380px){
+  .kpi-scroll .kpi{min-width:140px}
+  .swipe-card{width:calc(100vw - 28px)}
 }
-
-/* Mobile bottom navigation */
-.mobile-nav {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: var(--surface);
-  border-top: 1.5px solid var(--border);
-  z-index: 100;
-  padding: 6px 0 8px;
-  box-shadow: 0 -2px 12px rgba(29,100,60,.08);
-}
-.mobile-nav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text3);
-  cursor: pointer;
-  padding: 4px 0;
-  transition: color .15s;
-}
-.mobile-nav-item.active { color: var(--green-txt); }
-.mobile-nav-item i { font-size: 20px; }
-
-/* Add padding so content doesn't hide behind bottom nav on mobile */
-@media (max-width: 768px) {
-  .main { padding-bottom: 70px; }
-}
-
-/* ── Splash screen ── */
-.splash {
-  position: fixed; inset: 0; background: var(--bg);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  z-index: 999; transition: opacity .6s ease;
-  gap: 24px;
-}
-.splash.hidden { opacity: 0; pointer-events: none; }
-@keyframes pigBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-.splash-title { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -.5px; }
-.splash-subtitle { font-size: 14px; color: var(--text3); font-weight: 600; margin-top: -16px; }
-.splash-btn {
-  background: var(--green); color: #fff; border: none;
-  border-radius: 99px; padding: 14px 48px;
-  font-size: 16px; font-weight: 800; font-family: 'Nunito', sans-serif;
-  cursor: pointer; letter-spacing: .5px;
-  box-shadow: 0 6px 24px rgba(29,158,117,.35);
-  transition: transform .15s, box-shadow .15s;
-  animation: pulse 2s ease-in-out infinite;
-}
-.splash-btn:hover { transform: scale(1.05); box-shadow: 0 8px 28px rgba(29,158,117,.45); }
-@keyframes pulse { 0%,100%{box-shadow:0 6px 24px rgba(29,158,117,.35)} 50%{box-shadow:0 6px 32px rgba(29,158,117,.55)} }
 </style>
 </head>
 <body>
 
+<!-- SPLASH -->
 <div class="splash" id="splash">
-  <div style="font-size:100px;line-height:1;animation:pigBounce 1.8s ease-in-out infinite">🐷</div>
+  <div class="splash-pig">🐷</div>
   <div class="splash-title">Finanzas de Ber</div>
   <div class="splash-subtitle">Orden para llegar a mis objetivos.</div>
   <button class="splash-btn" onclick="startApp()">▶ &nbsp;Start</button>
 </div>
-<div class="app">
 
-<header class="topbar">
-  <div class="logo">
-    <div class="logo-blob" style="font-size:16px;line-height:1">🐷</div>
-    <span style="white-space:nowrap">Finanzas de Ber</span>
+<!-- Quick add overlay -->
+<div class="qa-overlay" id="qaOverlay" onclick="closeQuickAdd()"></div>
+
+<!-- Quick add panel (mobile) -->
+<div class="quick-add-panel" id="qaPanel">
+  <div class="quick-add-handle"></div>
+  <div class="quick-add-title">Registrar movimiento</div>
+  <div class="qa-row">
+    <div class="qa-field">
+      <div class="qa-label">Tipo</div>
+      <div class="qa-chips">
+        <button class="qa-chip selected" id="qaGasto" onclick="setQATipo('Gasto')">💸 Gasto</button>
+        <button class="qa-chip ing" id="qaIngreso" onclick="setQATipo('Ingreso')">💰 Ingreso</button>
+      </div>
+    </div>
+    <div class="qa-field">
+      <div class="qa-label">Concepto</div>
+      <input class="qa-input" id="qaConcepto" placeholder="ej. Café, Uber, Súper..."/>
+    </div>
+    <div class="qa-field">
+      <div class="qa-label">Monto</div>
+      <input class="qa-input" id="qaMonto" type="number" inputmode="decimal" placeholder="$0"/>
+    </div>
+    <div class="qa-field" id="qaMetodoField">
+      <div class="qa-label">Tarjeta</div>
+      <div class="qa-chips">
+        <button class="qa-chip" id="qaOro" onclick="setQAMetodo('Oro')">🟡 Oro</button>
+        <button class="qa-chip" id="qaNu" onclick="setQAMetodo('Nu')">🟢 Nu</button>
+        <button class="qa-chip" id="qaEf" onclick="setQAMetodo('Efectivo')">💵 Efectivo</button>
+      </div>
+    </div>
+    <div class="qa-field" id="qaCatField">
+      <div class="qa-label">Categoría</div>
+      <div class="qa-chips" id="qaChips"></div>
+    </div>
   </div>
-  <div class="tb-selects">
-    <select class="tb-sel" id="monthSel" onchange="setMonth(this.value)"></select>
-    <select class="tb-sel" id="qSel" onchange="renderDashboard()">
-      <option value="todas">Ambas quincenas</option>
-      <option value="Q1">1a quincena</option>
-      <option value="Q2">2a quincena</option>
-    </select>
-    <button class="tb-sel" onclick="openCreateMonth()" style="background:var(--green);color:#fff;border-color:var(--green);cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-plus" style="font-size:13px"></i> Mes</button>
+  <button class="qa-save-btn" onclick="saveQuickAdd()">Guardar</button>
+  <div class="chat-response" id="qaResp" style="justify-content:center;margin-top:8px"></div>
+</div>
+
+<!-- App -->
+<div class="app">
+  <header class="topbar">
+    <div class="logo">
+      <div class="logo-blob">🐷</div>
+      <span>Finanzas de Ber</span>
+    </div>
+    <div class="tb-selects" id="tbSelects">
+      <select class="tb-sel" id="monthSel" onchange="setMonth(this.value)"></select>
+      <select class="tb-sel" id="qSel" onchange="renderDashboard()">
+        <option value="todas">Ambas quincenas</option>
+        <option value="Q1">1a quincena</option>
+        <option value="Q2">2a quincena</option>
+      </select>
+      <button class="tb-sel" onclick="openCreateMonth()" style="background:var(--green);color:#fff;border-color:var(--green);cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-plus" style="font-size:13px"></i> Mes</button>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <div class="nav-section">Vistas</div>
+    <div class="nav-item active" id="nav-dashboard" onclick="goPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+    <div class="nav-item" id="nav-historial" onclick="goPage('historial')"><i class="ti ti-calendar-stats"></i> Historial</div>
+    <div class="nav-item" id="nav-deudas" onclick="goPage('deudas')"><i class="ti ti-credit-card-off"></i> Deudas</div>
+    <div class="nav-section">Acciones</div>
+    <div class="nav-item" onclick="openDeleteMonth()"><i class="ti ti-trash"></i> Borrar mes</div>
+    <div style="margin-top:auto;padding-top:18px">
+      <div class="sidebar-pill">
+        <div class="sp-label">Sueldo / quincena</div>
+        <div class="sp-val">$10,940</div>
+        <div class="sp-sub">Meta inversión: 30%</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <!-- Desktop KPI row -->
+      <div class="kpi-row" id="kpiRow"></div>
+      <!-- Mobile KPI scroll -->
+      <div class="kpi-scroll" id="kpiScroll"></div>
+      <!-- Mobile swipe dots -->
+      <div class="swipe-dots" id="cardDots"></div>
+
+      <!-- Desktop two-col -->
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><span class="card-title-left"><i class="ti ti-credit-card" style="font-size:14px;color:var(--blue)"></i> Por tarjeta</span></div>
+          <div class="tarjeta-row">
+            <div class="tarjeta nu"><div class="tarjeta-name">Nu</div><div class="tarjeta-amt" id="tNu">$0</div></div>
+            <div class="tarjeta oro"><div class="tarjeta-name">Oro</div><div class="tarjeta-amt" id="tOro">$0</div></div>
+            <div class="tarjeta ef"><div class="tarjeta-name">Efectivo</div><div class="tarjeta-amt" id="tEf">$0</div></div>
+          </div>
+          <div class="dist-bar" id="distBar"></div>
+          <div class="dist-legend" id="distLegend"></div>
+        </div>
+        <div class="pie-card">
+          <div class="card-title">
+            <span class="card-title-left"><i class="ti ti-chart-pie" style="font-size:14px;color:var(--purple)"></i> <span id="pieTitle">Gastos por categoría</span></span>
+            <button class="pie-back-btn" id="pieBackBtn" onclick="drillBack()"><i class="ti ti-arrow-left" style="font-size:11px"></i> Volver</button>
+          </div>
+          <div class="pie-hint" id="pieHint">Clic en un segmento para ver el desglose</div>
+          <div class="pie-inner">
+            <div class="pie-canvas-wrap"><canvas id="pieChart"></canvas></div>
+            <div class="pie-legend" id="pieLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile swipeable cards -->
+      <div class="swipe-container" id="swipeContainer"></div>
+
+      <div class="summary-strip" id="summaryStrip"></div>
+      <div class="card">
+        <div class="card-title">
+          <span class="card-title-left"><i class="ti ti-activity" style="font-size:14px;color:var(--green)"></i> Movimientos</span>
+          <span style="font-size:10px;color:var(--text3);font-weight:600">más reciente primero</span>
+        </div>
+        <div class="txn-list" id="txnList"></div>
+      </div>
+      <div class="chat-wrap">
+        <div class="chat-hint">Escríbeme en lenguaje natural: <span>142 café negro</span> <span>500 uber</span> <span>300 farmacia nu</span></div>
+        <div class="chat-row">
+          <input class="chat-input" id="chatInput" placeholder="¿Qué registramos hoy?" autocomplete="off"/>
+          <button class="chat-btn" id="chatBtn" onclick="sendChat()"><i class="ti ti-send" style="font-size:12px"></i> Enviar</button>
+        </div>
+        <div class="chat-response" id="chatResp"></div>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="page" id="page-historial">
+      <div class="card" style="padding:14px 17px">
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">Últimos 3 meses</div>
+        <div style="font-size:12px;color:var(--text3);font-weight:600">Resumen de ingresos, gastos, inversión y categorías</div>
+      </div>
+      <div class="hist-grid" id="histGrid"></div>
+    </div>
+
+    <!-- DEUDAS -->
+    <div class="page" id="page-deudas">
+      <div class="card" style="padding:14px 17px">
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">Mis deudas</div>
+        <div style="font-size:12px;color:var(--text3);font-weight:600">Seguimiento de créditos, MSI y pagos mensuales</div>
+      </div>
+      <div id="debtFormWrap" style="display:none">
+        <div class="debt-form">
+          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px">Nueva deuda</div>
+          <div class="debt-form-grid">
+            <div class="debt-form-group" style="grid-column:1/-1">
+              <div class="debt-form-label">Nombre / concepto</div>
+              <input class="debt-form-input" id="dNombre" placeholder="ej. iPhone 16 MSI"/>
+            </div>
+            <div class="debt-form-group">
+              <div class="debt-form-label">Tipo</div>
+              <select class="debt-form-input" id="dTipo">
+                <option value="mensual">Pago mensual</option>
+                <option value="msi">Meses sin intereses</option>
+                <option value="credito">Crédito</option>
+              </select>
+            </div>
+            <div class="debt-form-group">
+              <div class="debt-form-label">Monto total ($)</div>
+              <input class="debt-form-input" id="dTotal" type="number" placeholder="0"/>
+            </div>
+            <div class="debt-form-group">
+              <div class="debt-form-label">Pago mensual ($)</div>
+              <input class="debt-form-input" id="dPago" type="number" placeholder="0"/>
+            </div>
+            <div class="debt-form-group">
+              <div class="debt-form-label">Ya pagado ($)</div>
+              <input class="debt-form-input" id="dPagado" type="number" placeholder="0"/>
+            </div>
+            <div class="debt-form-group">
+              <div class="debt-form-label">Próximo pago (día)</div>
+              <input class="debt-form-input" id="dDia" type="number" placeholder="ej. 15"/>
+            </div>
+          </div>
+          <div class="debt-form-actions">
+            <button class="btn-save" onclick="saveDebt()">Guardar</button>
+            <button class="btn-cancel" onclick="document.getElementById('debtFormWrap').style.display='none'">Cancelar</button>
+          </div>
+        </div>
+      </div>
+      <button class="add-debt-btn" onclick="document.getElementById('debtFormWrap').style.display='block'"><i class="ti ti-plus" style="font-size:13px"></i> Agregar deuda</button>
+      <div class="debt-grid" id="debtGrid"></div>
+    </div>
+
+  </main>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-item active" id="mnav-dashboard" onclick="goPage('dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
+    <button class="mobile-nav-item" id="mnav-historial" onclick="goPage('historial')"><i class="ti ti-calendar-stats"></i>Historial</button>
+    <button class="mobile-nav-item" id="mnav-deudas" onclick="goPage('deudas')"><i class="ti ti-credit-card-off"></i>Deudas</button>
+    <button class="mobile-nav-item" id="mnav-ajustes" onclick="openDeleteMonth()"><i class="ti ti-settings"></i>Ajustes</button>
+  </nav>
+
+  <!-- Mobile quick add button -->
+  <div class="quick-add" id="quickAdd">
+    <button class="quick-add-btn" onclick="openQuickAdd()"><i class="ti ti-plus" style="font-size:22px"></i></button>
   </div>
-</header>
+
+</div>
 
 <!-- Create month modal -->
 <div id="monthModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center">
-  <div style="background:var(--surface);border-radius:var(--r);padding:22px 24px;width:300px;box-shadow:0 8px 32px rgba(0,0,0,.15)">
+  <div style="background:var(--surface);border-radius:var(--r);padding:22px 24px;width:300px;box-shadow:0 8px 32px rgba(0,0,0,.15);margin:16px">
     <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:16px">Crear nuevo mes</div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
       <div>
@@ -372,7 +551,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 
 <!-- Delete month modal -->
 <div id="deleteMonthModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center">
-  <div style="background:var(--surface);border-radius:var(--r);padding:22px 24px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,.15)">
+  <div style="background:var(--surface);border-radius:var(--r);padding:22px 24px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,.15);margin:16px">
     <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px">Borrar mes</div>
     <div style="font-size:12px;color:var(--text3);font-weight:600;margin-bottom:16px">Selecciona el mes que quieres eliminar. Se borrarán todos sus registros.</div>
     <div style="margin-bottom:16px">
@@ -380,7 +559,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
       <select id="deleteMonthSel" class="debt-form-input" style="width:100%"></select>
     </div>
     <div style="background:var(--red-pale);border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:12px;color:var(--red);font-weight:600">
-      ⚠️ Esta acción no se puede deshacer. Se eliminarán todos los gastos e ingresos del mes.
+      ⚠️ Esta acción no se puede deshacer.
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn-save" style="flex:1;background:var(--red);border:none" onclick="confirmDeleteMonth()">Eliminar mes</button>
@@ -389,143 +568,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
   </div>
 </div>
 
-<aside class="sidebar">
-  <div class="nav-section">Vistas</div>
-  <div class="nav-item active" id="nav-dashboard" onclick="goPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
-  <div class="nav-item" id="nav-historial" onclick="goPage('historial')"><i class="ti ti-calendar-stats"></i> Historial</div>
-  <div class="nav-item" id="nav-deudas" onclick="goPage('deudas')"><i class="ti ti-credit-card-off"></i> Deudas</div>
-  <div class="nav-section">Acciones</div>
-  <div class="nav-item" onclick="openDeleteMonth()"><i class="ti ti-trash"></i> Borrar mes</div>
-  <div style="margin-top:auto;padding-top:18px">
-    <div class="sidebar-pill">
-      <div class="sp-label">Sueldo / quincena</div>
-      <div class="sp-val">$10,940</div>
-      <div class="sp-sub">Meta inversión: 30%</div>
-    </div>
-  </div>
-</aside>
-
-<main class="main">
-
-  <!-- DASHBOARD -->
-  <div class="page active" id="page-dashboard">
-    <div class="kpi-row" id="kpiRow"></div>
-    <div class="two-col">
-      <div class="card">
-        <div class="card-title"><span class="card-title-left"><i class="ti ti-credit-card" style="font-size:14px;color:var(--blue)"></i> Por tarjeta</span></div>
-        <div class="tarjeta-row">
-          <div class="tarjeta nu"><div class="tarjeta-name">Nu</div><div class="tarjeta-amt" id="tNu">$0</div></div>
-          <div class="tarjeta oro"><div class="tarjeta-name">Oro</div><div class="tarjeta-amt" id="tOro">$0</div></div>
-          <div class="tarjeta ef"><div class="tarjeta-name">Efectivo</div><div class="tarjeta-amt" id="tEf">$0</div></div>
-        </div>
-        <div class="dist-bar" id="distBar"></div>
-        <div class="dist-legend" id="distLegend"></div>
-      </div>
-      <div class="pie-card">
-        <div class="card-title">
-          <span class="card-title-left"><i class="ti ti-chart-pie" style="font-size:14px;color:var(--purple)"></i> <span id="pieTitle">Gastos por categoría</span></span>
-          <button class="pie-back-btn" id="pieBackBtn" onclick="drillBack()"><i class="ti ti-arrow-left" style="font-size:11px"></i> Volver</button>
-        </div>
-        <div class="pie-hint" id="pieHint">Clic en un segmento para ver el desglose</div>
-        <div class="pie-inner">
-          <div class="pie-canvas-wrap"><canvas id="pieChart"></canvas></div>
-          <div class="pie-legend" id="pieLegend"></div>
-        </div>
-      </div>
-    </div>
-    <div class="summary-strip" id="summaryStrip"></div>
-    <div class="card">
-      <div class="card-title">
-        <span class="card-title-left"><i class="ti ti-activity" style="font-size:14px;color:var(--green)"></i> Movimientos</span>
-        <span style="font-size:10px;color:var(--text3);font-weight:600">más reciente primero</span>
-      </div>
-      <div class="txn-list" id="txnList"></div>
-    </div>
-    <div class="chat-wrap">
-      <div class="chat-hint">Escríbeme en lenguaje natural: <span>142 café negro</span> <span>500 uber</span> <span>300 farmacia nu</span> <span>ingreso 5000 freelance</span></div>
-      <div class="chat-row">
-        <input class="chat-input" id="chatInput" placeholder="¿Qué registramos hoy?" autocomplete="off"/>
-        <button class="chat-btn" id="chatBtn" onclick="sendChat()"><i class="ti ti-send" style="font-size:12px"></i> Enviar</button>
-      </div>
-      <div class="chat-response" id="chatResp"></div>
-    </div>
-  </div>
-
-  <!-- HISTORIAL -->
-  <div class="page" id="page-historial">
-    <div class="card" style="padding:14px 17px">
-      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">Últimos 3 meses</div>
-      <div style="font-size:12px;color:var(--text3);font-weight:600">Resumen de ingresos, gastos, inversión y categorías</div>
-    </div>
-    <div class="hist-grid" id="histGrid"></div>
-  </div>
-
-  <!-- DEUDAS -->
-  <div class="page" id="page-deudas">
-    <div class="card" style="padding:14px 17px">
-      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">Mis deudas</div>
-      <div style="font-size:12px;color:var(--text3);font-weight:600">Seguimiento de créditos, MSI y pagos mensuales</div>
-    </div>
-    <div id="debtFormWrap" style="display:none">
-      <div class="debt-form">
-        <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px">Nueva deuda</div>
-        <div class="debt-form-grid">
-          <div class="debt-form-group" style="grid-column:1/-1">
-            <div class="debt-form-label">Nombre / concepto</div>
-            <input class="debt-form-input" id="dNombre" placeholder="ej. iPhone 16 MSI"/>
-          </div>
-          <div class="debt-form-group">
-            <div class="debt-form-label">Tipo</div>
-            <select class="debt-form-input" id="dTipo">
-              <option value="mensual">Pago mensual</option>
-              <option value="msi">Meses sin intereses</option>
-              <option value="credito">Crédito</option>
-            </select>
-          </div>
-          <div class="debt-form-group">
-            <div class="debt-form-label">Monto total ($)</div>
-            <input class="debt-form-input" id="dTotal" type="number" placeholder="0"/>
-          </div>
-          <div class="debt-form-group">
-            <div class="debt-form-label">Pago mensual ($)</div>
-            <input class="debt-form-input" id="dPago" type="number" placeholder="0"/>
-          </div>
-          <div class="debt-form-group">
-            <div class="debt-form-label">Ya pagado ($)</div>
-            <input class="debt-form-input" id="dPagado" type="number" placeholder="0"/>
-          </div>
-          <div class="debt-form-group">
-            <div class="debt-form-label">Próximo pago (día)</div>
-            <input class="debt-form-input" id="dDia" type="number" placeholder="ej. 15"/>
-          </div>
-        </div>
-        <div class="debt-form-actions">
-          <button class="btn-save" onclick="saveDebt()">Guardar</button>
-          <button class="btn-cancel" onclick="document.getElementById('debtFormWrap').style.display='none'">Cancelar</button>
-        </div>
-      </div>
-    </div>
-    <button class="add-debt-btn" onclick="document.getElementById('debtFormWrap').style.display='block'"><i class="ti ti-plus" style="font-size:13px"></i> Agregar deuda</button>
-    <div class="debt-grid" id="debtGrid"></div>
-  </div>
-
-</main>
-  <!-- Mobile bottom nav -->
-  <nav class="mobile-nav" id="mobileNav">
-    <div class="mobile-nav-item active" id="mnav-dashboard" onclick="goPage('dashboard')">
-      <i class="ti ti-layout-dashboard"></i>Dashboard
-    </div>
-    <div class="mobile-nav-item" id="mnav-historial" onclick="goPage('historial')">
-      <i class="ti ti-calendar-stats"></i>Historial
-    </div>
-    <div class="mobile-nav-item" id="mnav-deudas" onclick="goPage('deudas')">
-      <i class="ti ti-credit-card-off"></i>Deudas
-    </div>
-  </nav>
-
-</div>
-
 <script>
+
 const SUELDO=10940, META=0.30;
 const PIE_PALETTE=['#809bce','#eac4d5','#f0b67f','#95b8d1','#d4a8c7','#f5d08a','#b8cfe8','#f2a8b8','#a8c4e8','#e8b8d4','#fad4a0'];
 const MESES_ES={1:'Enero',2:'Febrero',3:'Marzo',4:'Abril',5:'Mayo',6:'Junio',7:'Julio',8:'Agosto',9:'Septiembre',10:'Octubre',11:'Noviembre',12:'Diciembre'};
@@ -1076,6 +1120,154 @@ function showLoading(v){
     document.body.appendChild(el);
   }else if(el&&!v){el.remove();}
 }
+
+
+// ── Mobile Quick Add ──
+const CATS_LIST=['Comida','Transporte','Entretenimiento','Salud','Ropa','Servicios','Deporte','Conveniencia','Oficina','Wellness','Otro'];
+let _qaTipo='Gasto', _qaMetodo='Oro', _qaCat='Comida';
+
+function openQuickAdd(){
+  // Render category chips
+  document.getElementById('qaChips').innerHTML=CATS_LIST.map(c=>
+    `<button class="qa-chip${c===_qaCat?' selected':''}" onclick="setQACat('${c}')">${c}</button>`
+  ).join('');
+  setQAMetodo('Oro');
+  document.getElementById('qaPanel').classList.add('open');
+  document.getElementById('qaOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('qaConcepto').focus(),400);
+}
+function closeQuickAdd(){
+  document.getElementById('qaPanel').classList.remove('open');
+  document.getElementById('qaOverlay').classList.remove('show');
+}
+function setQATipo(t){
+  _qaTipo=t;
+  document.getElementById('qaGasto').classList.toggle('selected',t==='Gasto');
+  document.getElementById('qaIngreso').classList.toggle('selected',t==='Ingreso');
+  document.getElementById('qaMetodoField').style.display=t==='Gasto'?'':'none';
+  document.getElementById('qaCatField').style.display=t==='Gasto'?'':'none';
+}
+function setQAMetodo(m){
+  _qaMetodo=m;
+  ['Oro','Nu','Ef'].forEach(x=>{
+    const el=document.getElementById('qa'+x);
+    if(el)el.classList.toggle('selected',x===m||(x==='Ef'&&m==='Efectivo'));
+  });
+  if(m==='Ef'||m==='Efectivo'){
+    _qaMetodo='Efectivo';
+    document.getElementById('qaEf').classList.add('selected');
+  }
+}
+function setQACat(c){
+  _qaCat=c;
+  document.querySelectorAll('#qaChips .qa-chip').forEach(el=>{
+    el.classList.toggle('selected',el.textContent===c);
+  });
+}
+async function saveQuickAdd(){
+  const concepto=document.getElementById('qaConcepto').value.trim();
+  const monto=parseFloat(document.getElementById('qaMonto').value);
+  if(!concepto||!monto||monto<=0){
+    document.getElementById('qaResp').className='chat-response err';
+    document.getElementById('qaResp').innerHTML='<i class="ti ti-alert-circle"></i> Falta concepto o monto';
+    return;
+  }
+  const today=new Date();
+  const fecha=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+  const reg={id:uid(),fecha,tipo:_qaTipo,concepto,monto,metodo:_qaMetodo,cat:_qaTipo==='Ingreso'?'Ingreso':_qaCat,rec:'No',ts:Date.now(),mes:today.getMonth()+1,anio:today.getFullYear()};
+  document.getElementById('qaResp').className='chat-response';
+  document.getElementById('qaResp').innerHTML='<div class="spinner"></div>';
+  await saveReg(reg);
+  document.getElementById('qaResp').className='chat-response ok';
+  document.getElementById('qaResp').innerHTML=`<i class="ti ti-circle-check"></i> ${_qaTipo} registrado`;
+  document.getElementById('qaConcepto').value='';
+  document.getElementById('qaMonto').value='';
+  setTimeout(closeQuickAdd,800);
+  renderDashboard();
+}
+
+// ── Mobile swipeable cards ──
+let _pieMobile=null;
+function renderSwipeCards(gsts,totalIng,totalGst,neto,metaInv,disp){
+  const nu=gsts.filter(r=>r.metodo==='Nu').reduce((s,r)=>s+Number(r.monto),0);
+  const oro=gsts.filter(r=>r.metodo==='Oro').reduce((s,r)=>s+Number(r.monto),0);
+  const ef=gsts.filter(r=>r.metodo==='Efectivo').reduce((s,r)=>s+Number(r.monto),0);
+  const totM=nu+oro+ef||1;
+  const segs=[{c:'#1D9E75',v:nu,l:'Nu'},{c:'#f0b67f',v:oro,l:'Oro'},{c:'#c8c8c8',v:ef,l:'Efectivo'}].filter(s=>s.v>0);
+  const distBarHtml=segs.map(s=>`<div class="dist-seg" style="width:${Math.round(s.v/totM*100)}%;background:${s.c}"></div>`).join('');
+  const distLegHtml=segs.map(s=>`<span class="dl"><span class="dl-dot" style="background:${s.c}"></span>${s.l} ${fmt(s.v)}</span>`).join('');
+
+  const cats={};
+  for(const g of gsts)cats[g.cat]=(cats[g.cat]||0)+Number(g.monto);
+  const catEntries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  const totalCat=catEntries.reduce((s,[,v])=>s+v,0)||1;
+  const colors=catEntries.map((_,i)=>PIE_PALETTE[i%PIE_PALETTE.length]);
+
+  const sc=document.getElementById('swipeContainer');
+  sc.innerHTML=`
+    <div class="swipe-card card">
+      <div class="card-title"><span class="card-title-left"><i class="ti ti-credit-card" style="font-size:14px;color:var(--blue)"></i> Por tarjeta</span></div>
+      <div class="tarjeta-row">
+        <div class="tarjeta nu"><div class="tarjeta-name">Nu</div><div class="tarjeta-amt" style="color:var(--green-txt)">${fmt(nu)}</div></div>
+        <div class="tarjeta oro"><div class="tarjeta-name">Oro</div><div class="tarjeta-amt" style="color:#a06020">${fmt(oro)}</div></div>
+        <div class="tarjeta ef"><div class="tarjeta-name">Efectivo</div><div class="tarjeta-amt" style="color:var(--text2)">${fmt(ef)}</div></div>
+      </div>
+      <div class="dist-bar">${distBarHtml}</div>
+      <div class="dist-legend">${distLegHtml}</div>
+    </div>
+    <div class="swipe-card pie-card" style="min-height:220px">
+      <div class="card-title"><span class="card-title-left"><i class="ti ti-chart-pie" style="font-size:14px;color:var(--purple)"></i> Categorías</span></div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="width:130px;height:130px;flex-shrink:0"><canvas id="pieChartMobile"></canvas></div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;overflow:hidden">
+          ${catEntries.slice(0,5).map(([k,v],i)=>`
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text2)">
+              <span style="width:8px;height:8px;border-radius:2px;background:${colors[i]};flex-shrink:0"></span>
+              <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${k}</span>
+              <span style="font-weight:800;color:var(--text)">${fmt(v)}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  // Render mobile pie
+  if(_pieMobile)_pieMobile.destroy();
+  const ctx2=document.getElementById('pieChartMobile')?.getContext('2d');
+  if(ctx2&&catEntries.length){
+    _pieMobile=new Chart(ctx2,{
+      type:'doughnut',
+      data:{labels:catEntries.map(([k])=>k),datasets:[{data:catEntries.map(([,v])=>v),backgroundColor:colors,borderColor:'#fff',borderWidth:2,hoverOffset:6}]},
+      options:{responsive:true,cutout:'58%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)}`}}},animation:{duration:500}}
+    });
+  }
+
+  // Dots
+  const dots=document.getElementById('cardDots');
+  dots.innerHTML='<span class="swipe-dot active" id="dot0"></span><span class="swipe-dot" id="dot1"></span>';
+  sc.addEventListener('scroll',()=>{
+    const idx=Math.round(sc.scrollLeft/(sc.scrollWidth/2));
+    dots.querySelectorAll('.swipe-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  },{passive:true});
+}
+
+// ── Inject mobile KPI scroll ──
+const _origRenderDashboard=renderDashboard;
+renderDashboard=function(){
+  _origRenderDashboard();
+  // After render, also populate mobile kpi scroll
+  const kpiScroll=document.getElementById('kpiScroll');
+  if(kpiScroll){
+    kpiScroll.innerHTML=document.getElementById('kpiRow').innerHTML;
+  }
+  // Populate swipe cards
+  const all=getAllRows();
+  const gsts=all.filter(r=>r.tipo==='Gasto');
+  const ings=all.filter(r=>r.tipo==='Ingreso');
+  const totalIng=ings.reduce((s,r)=>s+Number(r.monto),0);
+  const totalGst=gsts.reduce((s,r)=>s+Number(r.monto),0);
+  const neto=totalIng-totalGst,metaInv=totalIng*META,disp=neto-metaInv;
+  renderSwipeCards(gsts,totalIng,totalGst,neto,metaInv,disp);
+};
 </script>
 </body>
 </html>
