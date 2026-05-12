@@ -192,6 +192,92 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .chat-response.err{color:var(--red)}
 .spinner{width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Mobile responsive ── */
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: 56px 1fr 56px; }
+  .sidebar { display: none; }
+  .main { padding: 12px; gap: 12px; }
+
+  /* Bottom nav bar */
+  .mobile-nav { display: flex !important; }
+
+  /* KPIs: 2x2 grid */
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi-val { font-size: 18px; }
+
+  /* Two-col: stack */
+  .two-col { grid-template-columns: 1fr; }
+
+  /* Historial: stack */
+  .hist-grid { grid-template-columns: 1fr; }
+
+  /* Summary strip: 2 columns wrap */
+  .summary-strip { flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .ss-div { display: none; }
+  .ss-item { min-width: 80px; }
+  .ss-val { font-size: 15px; }
+
+  /* Topbar */
+  .topbar { padding: 0 12px; gap: 8px; }
+  .tb-selects { gap: 5px; }
+  .tb-sel { font-size: 11px; padding: 4px 7px; }
+  .logo-text-hide { display: none; }
+
+  /* Pie */
+  .pie-inner { flex-direction: column; align-items: center; }
+  .pie-canvas-wrap { width: 160px; height: 160px; }
+  .pie-legend { width: 100%; }
+
+  /* Txn list */
+  .txn-list { max-height: 320px; }
+
+  /* Debt amounts */
+  .debt-amounts { grid-template-columns: repeat(3,1fr); }
+
+  /* Chat */
+  .chat-row { flex-wrap: wrap; }
+  .chat-input { min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 7px; }
+  .kpi { padding: 11px 12px; }
+  .kpi-val { font-size: 16px; }
+  .kpi-label { font-size: 10px; }
+}
+
+/* Mobile bottom navigation */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1.5px solid var(--border);
+  z-index: 100;
+  padding: 6px 0 8px;
+  box-shadow: 0 -2px 12px rgba(29,100,60,.08);
+}
+.mobile-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text3);
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color .15s;
+}
+.mobile-nav-item.active { color: var(--green-txt); }
+.mobile-nav-item i { font-size: 20px; }
+
+/* Add padding so content doesn't hide behind bottom nav on mobile */
+@media (max-width: 768px) {
+  .main { padding-bottom: 70px; }
+}
 </style>
 </head>
 <body>
@@ -338,6 +424,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
   </div>
 
 </main>
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-item active" id="mnav-dashboard" onclick="goPage('dashboard')">
+      <i class="ti ti-layout-dashboard"></i>Dashboard
+    </div>
+    <div class="mobile-nav-item" id="mnav-historial" onclick="goPage('historial')">
+      <i class="ti ti-calendar-stats"></i>Historial
+    </div>
+    <div class="mobile-nav-item" id="mnav-deudas" onclick="goPage('deudas')">
+      <i class="ti ti-credit-card-off"></i>Deudas
+    </div>
+  </nav>
+
 </div>
 
 <script>
@@ -429,12 +528,13 @@ let curPage='dashboard';
 function goPage(p){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-item').forEach(el=>el.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  document.getElementById('nav-'+p).classList.add('active');
+  document.getElementById('nav-'+p)?.classList.add('active');
+  const mn=document.getElementById('mnav-'+p);if(mn)mn.classList.add('active');
   curPage=p;
   if(p==='historial') renderHistorial();
   if(p==='deudas') renderDebts();
-  // ocultar selects de mes solo en páginas que no los usan
   document.querySelector('.tb-selects').style.display=(p==='dashboard')?'flex':'none';
 }
 
