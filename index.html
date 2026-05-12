@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1D9E75">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Finanzas">
 <link rel="icon" type="image/png" href="icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Finanzas Personales</title>
@@ -31,7 +37,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .main{overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
 
 /* nav */
-.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;letter-spacing:-.3px;color:var(--text)}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14px;letter-spacing:-.3px;color:var(--text);white-space:nowrap;overflow:visible;flex-shrink:0}
 .logo-blob{width:30px;height:30px;background:var(--green);border-radius:50% 50% 50% 30%/50% 50% 30% 50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .tb-selects{display:flex;gap:7px;margin-left:auto}
 .tb-sel{background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;color:var(--text2);font-size:12px;font-weight:600;padding:5px 10px;font-family:'Nunito',sans-serif;cursor:pointer}
@@ -280,30 +286,89 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 @media (max-width: 768px) {
   .main { padding-bottom: 70px; }
 }
+
+/* ── Splash screen ── */
+.splash {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 999; transition: opacity .6s ease;
+  gap: 24px;
+}
+.splash.hidden { opacity: 0; pointer-events: none; }
+@keyframes pigBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.splash-title { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -.5px; }
+.splash-subtitle { font-size: 14px; color: var(--text3); font-weight: 600; margin-top: -16px; }
+.splash-btn {
+  background: var(--green); color: #fff; border: none;
+  border-radius: 99px; padding: 14px 48px;
+  font-size: 16px; font-weight: 800; font-family: 'Nunito', sans-serif;
+  cursor: pointer; letter-spacing: .5px;
+  box-shadow: 0 6px 24px rgba(29,158,117,.35);
+  transition: transform .15s, box-shadow .15s;
+  animation: pulse 2s ease-in-out infinite;
+}
+.splash-btn:hover { transform: scale(1.05); box-shadow: 0 8px 28px rgba(29,158,117,.45); }
+@keyframes pulse { 0%,100%{box-shadow:0 6px 24px rgba(29,158,117,.35)} 50%{box-shadow:0 6px 32px rgba(29,158,117,.55)} }
 </style>
 </head>
 <body>
+
+<div class="splash" id="splash">
+  <div style="font-size:100px;line-height:1;animation:pigBounce 1.8s ease-in-out infinite">🐷</div>
+  <div class="splash-title">Finanzas de Ber</div>
+  <div class="splash-subtitle">Orden para llegar a mis objetivos.</div>
+  <button class="splash-btn" onclick="startApp()">▶ &nbsp;Start</button>
+</div>
 <div class="app">
 
 <header class="topbar">
   <div class="logo">
-    <div class="logo-blob"><i class="ti ti-leaf" style="color:#fff;font-size:14px"></i></div>
-    Finanzas
+    <div class="logo-blob" style="font-size:16px;line-height:1">🐷</div>
+    <span style="white-space:nowrap">Finanzas de Ber</span>
   </div>
   <div class="tb-selects">
-    <select class="tb-sel" id="monthSel" onchange="setMonth(this.value)">
-      <option value="5">Mayo 2025</option><option value="6">Junio 2025</option>
-      <option value="7">Julio 2025</option><option value="8">Agosto 2025</option>
-      <option value="9">Septiembre 2025</option><option value="10">Octubre 2025</option>
-      <option value="11">Noviembre 2025</option><option value="12">Diciembre 2025</option>
-    </select>
+    <select class="tb-sel" id="monthSel" onchange="setMonth(this.value)"></select>
     <select class="tb-sel" id="qSel" onchange="renderDashboard()">
       <option value="todas">Ambas quincenas</option>
       <option value="Q1">1a quincena</option>
       <option value="Q2">2a quincena</option>
     </select>
+    <button class="tb-sel" onclick="openCreateMonth()" style="background:var(--green);color:#fff;border-color:var(--green);cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-plus" style="font-size:13px"></i> Mes</button>
   </div>
 </header>
+
+<!-- Create month modal -->
+<div id="monthModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border-radius:var(--r);padding:22px 24px;width:300px;box-shadow:0 8px 32px rgba(0,0,0,.15)">
+    <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:16px">Crear nuevo mes</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.6px">Mes</div>
+        <select id="newMonthNum" class="debt-form-input" style="width:100%">
+          <option value="1">Enero</option><option value="2">Febrero</option>
+          <option value="3">Marzo</option><option value="4">Abril</option>
+          <option value="5">Mayo</option><option value="6">Junio</option>
+          <option value="7">Julio</option><option value="8">Agosto</option>
+          <option value="9">Septiembre</option><option value="10">Octubre</option>
+          <option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.6px">Año</div>
+        <input id="newMonthYear" type="number" class="debt-form-input" style="width:100%" value="2026"/>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="checkbox" id="newMonthRec" checked style="width:16px;height:16px;accent-color:var(--green)"/>
+        <label for="newMonthRec" style="font-size:12px;font-weight:600;color:var(--text2)">Pre-cargar gastos recurrentes</label>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-save" style="flex:1" onclick="createMonth()">Crear mes</button>
+      <button class="btn-cancel" onclick="closeCreateMonth()">Cancelar</button>
+    </div>
+  </div>
+</div>
 
 <aside class="sidebar">
   <div class="nav-section">Vistas</div>
@@ -458,17 +523,17 @@ const RECURRENTES=[
   {concepto:"YouTube Premium",monto:209,cat:"Entretenimiento",metodo:"Oro",dia:9,desde:6},
 ];
 const MANUAL_MAYO=[
-  {fecha:"2025-05-07",tipo:"Gasto",concepto:"Entrenadora running",monto:850,metodo:"Oro",rec:"Si",cat:"Deporte",ts:1},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Headspace",monto:99,metodo:"Oro",rec:"Si",cat:"Wellness",ts:2},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Fox One Mx (Champions)",monto:175,metodo:"Oro",rec:"Si",cat:"Entretenimiento",ts:3},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Regalo dia madres",monto:1067,metodo:"Oro",rec:"No",cat:"Otro",ts:4},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Oxxo",monto:150,metodo:"Oro",rec:"No",cat:"Conveniencia",ts:5},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Restaurante",monto:707,metodo:"Oro",rec:"No",cat:"Comida",ts:6},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Tierra Garat",monto:135,metodo:"Oro",rec:"No",cat:"Comida",ts:7},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Sumesa (oficina)",monto:118,metodo:"Oro",rec:"No",cat:"Oficina",ts:8},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Oxxo",monto:18.5,metodo:"Oro",rec:"No",cat:"Conveniencia",ts:9},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Adidas Splits",monto:600,metodo:"Efectivo",rec:"No",cat:"Deporte",ts:10},
-  {fecha:"2025-05-11",tipo:"Gasto",concepto:"Cafe Negro",monto:142,metodo:"Oro",rec:"No",cat:"Comida",ts:11},
+  {fecha:"2026-05-07",tipo:"Gasto",concepto:"Entrenadora running",monto:850,metodo:"Oro",rec:"Si",cat:"Deporte",ts:1},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Headspace",monto:99,metodo:"Oro",rec:"Si",cat:"Wellness",ts:2},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Fox One Mx (Champions)",monto:175,metodo:"Oro",rec:"Si",cat:"Entretenimiento",ts:3},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Regalo dia madres",monto:1067,metodo:"Oro",rec:"No",cat:"Otro",ts:4},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Oxxo",monto:150,metodo:"Oro",rec:"No",cat:"Conveniencia",ts:5},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Restaurante",monto:707,metodo:"Oro",rec:"No",cat:"Comida",ts:6},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Tierra Garat",monto:135,metodo:"Oro",rec:"No",cat:"Comida",ts:7},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Sumesa (oficina)",monto:118,metodo:"Oro",rec:"No",cat:"Oficina",ts:8},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Oxxo",monto:18.5,metodo:"Oro",rec:"No",cat:"Conveniencia",ts:9},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Adidas Splits",monto:600,metodo:"Efectivo",rec:"No",cat:"Deporte",ts:10},
+  {fecha:"2026-05-11",tipo:"Gasto",concepto:"Cafe Negro",monto:142,metodo:"Oro",rec:"No",cat:"Comida",ts:11},
 ];
 
 // ── Supabase config ──
@@ -526,7 +591,7 @@ function fmt(n){return'$'+Math.round(n).toLocaleString('es-MX')}
 function pad(n){return String(n).padStart(2,'0')}
 
 // ── Navigation ──
-let curPage='dashboard';
+let curPage='dashboard',curYear=2026;
 function goPage(p){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
@@ -535,7 +600,7 @@ function goPage(p){
   document.getElementById('nav-'+p)?.classList.add('active');
   const mn=document.getElementById('mnav-'+p);if(mn)mn.classList.add('active');
   curPage=p;
-  if(p==='historial') renderHistorial();
+  if(p==='historial'){renderMonthSelector();renderHistorial();}
   if(p==='deudas') renderDebts();
   document.querySelector('.tb-selects').style.display=(p==='dashboard')?'flex':'none';
 }
@@ -545,26 +610,25 @@ function setMonth(v){curMonth=parseInt(v);renderDashboard();}
 
 // ── Data helpers ──
 function getBaseRows(mn){
-  const yr=2025,rows=[];
-  rows.push({id:'sq1_'+mn,fecha:`${yr}-${pad(mn)}-01`,tipo:'Ingreso',concepto:'Sueldo Q1',monto:SUELDO,metodo:'--',rec:'Si',cat:'Ingreso',ts:0});
-  rows.push({id:'sq2_'+mn,fecha:`${yr}-${pad(mn)}-16`,tipo:'Ingreso',concepto:'Sueldo Q2',monto:SUELDO,metodo:'--',rec:'Si',cat:'Ingreso',ts:0});
-  if(mn===5){MANUAL_MAYO.forEach((r,i)=>rows.push({...r,id:'m_'+i}));}
-  else{for(const r of RECURRENTES){if(mn<r.desde)continue;rows.push({id:'rec_'+r.concepto+mn,fecha:`${yr}-${pad(mn)}-${pad(r.dia)}`,tipo:'Gasto',concepto:r.concepto,monto:r.monto,metodo:r.metodo,rec:'Si',cat:r.cat,ts:r.dia});}}
-  return rows;
+  return []; // All data now comes from Supabase — no local base rows
 }
-function getMonthRows(mn){
-  const d=store(),yr=2025;
-  const manual=d.regs.filter(r=>{const dt=new Date(r.fecha);return dt.getFullYear()===yr&&(dt.getMonth()+1)===mn;});
-  return[...getBaseRows(mn),...manual];
+function getMonthRows(mn,yr){
+  yr=yr||curYear||2026;
+  return _cache.regs.filter(r=>{
+    if(!r.fecha||r.tipo==='_marker')return false;
+    const dt=new Date(r.fecha);
+    return dt.getFullYear()===yr&&(dt.getMonth()+1)===mn;
+  });
 }
 function getAllRows(){
   const qf=document.getElementById('qSel').value;
-  let all=getMonthRows(curMonth);
+  let all=getMonthRows(curMonth,curYear);
   if(qf!=='todas')all=all.filter(r=>{const d2=parseInt(r.fecha.split('-')[2]);return(d2<=15?'Q1':'Q2')===qf;});
   return all;
 }
-function calcMonth(mn){
-  const rows=getMonthRows(mn);
+function calcMonth(mn,yr){
+  yr=yr||curYear||2026;
+  const rows=getMonthRows(mn,yr);
   const ings=rows.filter(r=>r.tipo==='Ingreso');
   const gsts=rows.filter(r=>r.tipo==='Gasto');
   const totalIng=ings.reduce((s,r)=>s+Number(r.monto),0);
@@ -685,13 +749,18 @@ function genShades(hex,n){
 
 // ── Historial ──
 function renderHistorial(){
-  const yr=2025;
-  // Últimos 3 meses antes del mes actual (puede incluir meses sin data)
-  const months=[];
-  for(let i=3;i>=1;i--){let m=curMonth-i;if(m<1)m+=12;months.push(m);}
+  // Últimos 3 meses registrados antes del mes actual
+  const allMonths=getActiveMonths();
+  const curIdx=allMonths.findIndex(m=>m.month===curMonth&&m.year===curYear);
+  const prevMonths=curIdx>0?allMonths.slice(Math.max(0,curIdx-3),curIdx):allMonths.slice(-3);
 
-  document.getElementById('histGrid').innerHTML=months.map(mn=>{
-    const d=calcMonth(mn);
+  if(!prevMonths.length){
+    document.getElementById('histGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1;padding:40px">No hay meses anteriores registrados aún.</div>';
+    return;
+  }
+
+  document.getElementById('histGrid').innerHTML=prevMonths.map(({month:mn,year:yr})=>{
+    const d=calcMonth(mn,yr);
     const pctGst=d.totalIng>0?Math.min(100,Math.round(d.totalGst/d.totalIng*100)):0;
     const pctAh=d.totalIng>0?Math.round(d.neto/d.totalIng*100):0;
     const netColor=d.neto>=0?'var(--green-txt)':'var(--red)';
@@ -785,8 +854,12 @@ function renderDebts(){
 async function delReg(id){await deleteReg(id);renderDashboard();}
 async function clearMonth(){
   if(!confirm('Eliminar registros manuales de este mes?'))return;
-  const mn=curMonth,yr=2025;
-  const toDelete=_cache.regs.filter(r=>{const dt=new Date(r.fecha);return dt.getFullYear()===yr&&(dt.getMonth()+1)===mn&&!r.id?.startsWith('sq')&&!r.id?.startsWith('m_')&&!r.id?.startsWith('rec_');});
+  const mn=curMonth,yr=curYear||2026;
+  const toDelete=_cache.regs.filter(r=>{
+    if(!r.fecha)return false;
+    const dt=new Date(r.fecha);
+    return dt.getFullYear()===yr&&(dt.getMonth()+1)===mn&&!r.id?.startsWith('sq')&&!r.id?.startsWith('rec_')&&r.tipo!=='_marker';
+  });
   await Promise.all(toDelete.map(r=>deleteReg(r.id)));
   renderDashboard();
 }
@@ -817,11 +890,126 @@ async function sendChat(){
   finally{btn.disabled=false;}
 }
 
+// ── Month management ──
+const MESES_NAMES={1:'Enero',2:'Febrero',3:'Marzo',4:'Abril',5:'Mayo',6:'Junio',7:'Julio',8:'Agosto',9:'Septiembre',10:'Octubre',11:'Noviembre',12:'Diciembre'};
+
+function getActiveMonths(){
+  // Get unique month+year combos from registros in cache
+  const months=new Set();
+  _cache.regs.forEach(r=>{
+    if(r.fecha){
+      const dt=new Date(r.fecha);
+      const key=`${dt.getFullYear()}-${dt.getMonth()+1}`;
+      months.add(key);
+    }
+  });
+  // Also include any manually created months stored in cache
+  (_cache.months||[]).forEach(m=>months.add(`${m.year}-${m.month}`));
+  return Array.from(months).map(k=>{const[y,m]=k.split('-');return{year:parseInt(y),month:parseInt(m)};})
+    .sort((a,b)=>a.year!==b.year?a.year-b.year:a.month-b.month);
+}
+
+function renderMonthSelector(){
+  const sel=document.getElementById('monthSel');
+  if(!sel)return;
+  const months=getActiveMonths();
+  if(!months.length){sel.innerHTML='<option value="">Sin meses</option>';return;}
+  sel.innerHTML=months.map(m=>`<option value="${m.month}" data-year="${m.year}" ${m.month===curMonth&&m.year===curYear?'selected':''}>${MESES_NAMES[m.month]} ${m.year}</option>`).join('');
+  // Set curMonth/curYear to selected
+  const sel2=sel.options[sel.selectedIndex];
+  if(sel2){curMonth=parseInt(sel2.value);curYear=parseInt(sel2.dataset.year||2026);}
+}
+
+function setMonth(v){
+  const sel=document.getElementById('monthSel');
+  const opt=sel.options[sel.selectedIndex];
+  curMonth=parseInt(v);
+  curYear=parseInt(opt?.dataset.year||2026);
+  renderDashboard();
+}
+
+function openCreateMonth(){
+  // Pre-select next logical month
+  const months=getActiveMonths();
+  let nextM=5,nextY=2026;
+  if(months.length){
+    const last=months[months.length-1];
+    nextM=last.month+1;nextY=last.year;
+    if(nextM>12){nextM=1;nextY++;}
+  }
+  document.getElementById('newMonthNum').value=nextM;
+  document.getElementById('newMonthYear').value=nextY;
+  const modal=document.getElementById('monthModal');
+  modal.style.display='flex';
+}
+function closeCreateMonth(){document.getElementById('monthModal').style.display='none';}
+
+async function createMonth(){
+  const mn=parseInt(document.getElementById('newMonthNum').value);
+  const yr=parseInt(document.getElementById('newMonthYear').value);
+  const loadRec=document.getElementById('newMonthRec').checked;
+  const key=`${yr}-${mn}`;
+
+  // Check if already exists
+  const existing=getActiveMonths().find(m=>m.month===mn&&m.year===yr);
+  if(existing){alert(`${MESES_NAMES[mn]} ${yr} ya existe.`);return;}
+
+  // Store month marker
+  const d=store();
+  if(!d.months)d.months=[];
+  d.months.push({month:mn,year:yr});
+  save(d);
+
+  // Save month marker to Supabase as a special "month_marker" reg
+  await saveReg({id:`month_${yr}_${mn}`,fecha:`${yr}-${pad(mn)}-01`,tipo:'_marker',concepto:'month_marker',monto:0,metodo:'',rec:'',cat:'',ts:0,mes:mn,anio:yr});
+
+  // Pre-load recurrentes if checked
+  if(loadRec){
+    const recRows=buildRecurrentes(mn,yr);
+    for(const r of recRows){
+      await saveReg({...r,mes:mn,anio:yr});
+    }
+  }
+
+  closeCreateMonth();
+  curMonth=mn;curYear=yr;
+  await loadFromSupabase();
+  renderMonthSelector();
+  renderDashboard();
+}
+
+function buildRecurrentes(mn,yr){
+  const rows=[];
+  // Sueldo
+  rows.push({id:`sq1_${yr}_${mn}`,fecha:`${yr}-${pad(mn)}-01`,tipo:'Ingreso',concepto:'Sueldo Q1',monto:SUELDO,metodo:'--',rec:'Si',cat:'Ingreso',ts:0});
+  rows.push({id:`sq2_${yr}_${mn}`,fecha:`${yr}-${pad(mn)}-16`,tipo:'Ingreso',concepto:'Sueldo Q2',monto:SUELDO,metodo:'--',rec:'Si',cat:'Ingreso',ts:0});
+  for(const r of RECURRENTES){
+    rows.push({id:`rec_${r.concepto}_${yr}_${mn}`,fecha:`${yr}-${pad(mn)}-${pad(r.dia)}`,tipo:'Gasto',concepto:r.concepto,monto:r.monto,metodo:r.metodo,rec:'Si',cat:r.cat,ts:r.dia});
+  }
+  return rows;
+}
+
+function startApp(){
+  const splash=document.getElementById('splash');
+  splash.classList.add('hidden');
+  setTimeout(()=>splash.remove(), 700);
+}
+
 // ── Init ──
 (async()=>{
   showLoading(true);
   await loadFromSupabase();
   showLoading(false);
+  // Set current month to most recent available, or today
+  const months=getActiveMonths();
+  const now=new Date();
+  if(months.length){
+    const last=months[months.length-1];
+    curMonth=last.month;curYear=last.year;
+  } else {
+    curMonth=now.getMonth()+1;curYear=now.getFullYear();
+  }
+  renderMonthSelector();
   renderDashboard();
 })();
 
